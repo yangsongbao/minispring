@@ -1,27 +1,40 @@
 package pers.minispring;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import pers.minispring.beans.factory.BeanCreationException;
 import pers.minispring.beans.factory.BeanDefinitionStoreException;
 import pers.minispring.beans.factory.BeanFactory;
 import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.factory.support.DefaultBeanFactory;
+import pers.minispring.beans.factory.xml.XmlBeanDefinitionReader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class BeanFactoryTest {
 
+    private DefaultBeanFactory factory = null;
+    private XmlBeanDefinitionReader reader = null;
+
+    @Before
+    public void setUp(){
+        factory = new DefaultBeanFactory();
+        reader = new XmlBeanDefinitionReader(factory);
+    }
+
+
     @Test
     public void testGetBean(){
-        BeanFactory beanFactory = new DefaultBeanFactory("petstore-v1.xml");
 
-        BeanDefinition beanDefinition = beanFactory.getBeanDefinition("petStore");
+        reader.loadBeanDefinition("petstore-v1.xml");
+
+        BeanDefinition beanDefinition = factory.getBeanDefinition("petStore");
 
         assertEquals("pers.minispring.PetStoreService", beanDefinition.getBeanClassName());
 
-        PetStoreService petStoreService = (PetStoreService)beanFactory.getBean("petStore");
+        PetStoreService petStoreService = (PetStoreService)factory.getBean("petStore");
 
         assertNotNull(petStoreService);
     }
@@ -29,9 +42,10 @@ public class BeanFactoryTest {
     @Test
     public void testInvalidBean() {
 
-        BeanFactory beanFactory = new DefaultBeanFactory("petstore-v1.xml");
+        reader.loadBeanDefinition("petstore-v1.xml");
+
         try {
-            beanFactory.getBean("invalidBean");
+            factory.getBean("invalidBean");
         }catch (BeanCreationException e){
             return;
         }
@@ -42,7 +56,7 @@ public class BeanFactoryTest {
     public void testInvalidXML() {
 
         try {
-            new DefaultBeanFactory("xxx-v1.xml");
+            reader.loadBeanDefinition("xxxx.xml");
         }catch (BeanDefinitionStoreException e){
             return;
         }

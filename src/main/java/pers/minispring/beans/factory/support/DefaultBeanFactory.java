@@ -21,42 +21,21 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author songbao.yang
  */
-public class DefaultBeanFactory implements BeanFactory {
-
-    private static final String ID_ATTRIBUTE = "id";
-    private static final String CLASS_ATTRIBUTE = "class";
+public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry {
 
     private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
 
-    public DefaultBeanFactory(String configFile) {
-        loadBeanDefinition(configFile);
-    }
-
-    private void loadBeanDefinition(String configFile) {
-
-        ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream(configFile)){
-            SAXReader saxReader = new SAXReader();
-            Document document = saxReader.read(inputStream);
-
-            //<beans>
-            Element root = document.getRootElement();
-            Iterator iterator = root.elementIterator();
-            while (iterator.hasNext()){
-                Element element = (Element)iterator.next();
-                String id = element.attributeValue(ID_ATTRIBUTE);
-                String beanClassName = element.attributeValue(CLASS_ATTRIBUTE);
-                BeanDefinition beanDefinition = new GenericBeanDefiniton(id, beanClassName);
-                this.beanDefinitionMap.put(id, beanDefinition);
-            }
-        } catch (Exception e){
-            throw new BeanDefinitionStoreException("parsing XML document fail", e);
-        }
+    public DefaultBeanFactory( ) {
     }
 
     @Override
     public BeanDefinition getBeanDefinition(String beanID) {
         return this.beanDefinitionMap.get(beanID);
+    }
+
+    @Override
+    public void registryBeanDefinition(String beanID, BeanDefinition beanDefinition) {
+        this.beanDefinitionMap.put(beanID, beanDefinition);
     }
 
     @Override
