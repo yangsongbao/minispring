@@ -1,5 +1,8 @@
 package pers.minispring.beans;
 
+/**
+ * @author songbao.yang
+ */
 public class BeansException extends RuntimeException {
 
     public BeansException(String message) {
