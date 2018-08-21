@@ -1,19 +1,10 @@
 package pers.minispring.beans.factory.support;
 
-import lombok.extern.slf4j.Slf4j;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.factory.BeanCreationException;
-import pers.minispring.beans.factory.BeanDefinitionStoreException;
-import pers.minispring.beans.factory.BeanFactory;
+import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
 import pers.minispring.util.ClassUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,11 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author songbao.yang
  */
-public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry {
+public class DefaultBeanFactory implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
     private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
 
-    public DefaultBeanFactory( ) {
+    private ClassLoader beanClassLoader;
+
+    public DefaultBeanFactory() {
     }
 
     @Override
@@ -41,10 +34,10 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry {
     @Override
     public Object getBean(String beanID) {
         BeanDefinition beanDefinition = this.getBeanDefinition(beanID);
-        if (beanDefinition == null){
+        if (beanDefinition == null) {
             throw new BeanCreationException("Bean Definition does not exist");
         }
-        ClassLoader loader = ClassUtils.getDefaultClassLoader();
+        ClassLoader loader = this.getBeanClassLoader();
         String beanClassName = beanDefinition.getBeanClassName();
 
         try {
@@ -54,5 +47,15 @@ public class DefaultBeanFactory implements BeanFactory, BeanDefinitionRegistry {
         } catch (Exception e) {
             throw new BeanCreationException("create bean for " + beanClassName + " fail", e);
         }
+    }
+
+    @Override
+    public ClassLoader getBeanClassLoader() {
+        return (this.beanClassLoader != null ? this.beanClassLoader : ClassUtils.getDefaultClassLoader());
+    }
+
+    @Override
+    public void setBeanClassLoader(ClassLoader classLoader) {
+        this.beanClassLoader = classLoader;
     }
 }

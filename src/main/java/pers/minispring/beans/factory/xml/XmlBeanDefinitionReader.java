@@ -7,7 +7,7 @@ import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.factory.BeanDefinitionStoreException;
 import pers.minispring.beans.factory.support.BeanDefinitionRegistry;
 import pers.minispring.beans.factory.support.GenericBeanDefiniton;
-import pers.minispring.util.ClassUtils;
+import pers.minispring.core.io.Resource;
 
 import java.io.InputStream;
 import java.util.Iterator;
@@ -26,24 +26,23 @@ public class XmlBeanDefinitionReader {
         this.registry = registry;
     }
 
-    public void loadBeanDefinition(String configFile) {
+    public void loadBeanDefinition(Resource resource) {
 
-        ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream(configFile)){
+        try (InputStream inputStream = resource.getInputStream()) {
             SAXReader saxReader = new SAXReader();
             Document document = saxReader.read(inputStream);
 
             //<beans>
             Element root = document.getRootElement();
             Iterator iterator = root.elementIterator();
-            while (iterator.hasNext()){
-                Element element = (Element)iterator.next();
+            while (iterator.hasNext()) {
+                Element element = (Element) iterator.next();
                 String id = element.attributeValue(ID_ATTRIBUTE);
                 String beanClassName = element.attributeValue(CLASS_ATTRIBUTE);
                 BeanDefinition beanDefinition = new GenericBeanDefiniton(id, beanClassName);
                 registry.registryBeanDefinition(id, beanDefinition);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new BeanDefinitionStoreException("parsing XML document fail", e);
         }
     }

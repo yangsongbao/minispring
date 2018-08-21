@@ -3,12 +3,12 @@ package pers.minispring;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.factory.BeanCreationException;
 import pers.minispring.beans.factory.BeanDefinitionStoreException;
-import pers.minispring.beans.factory.BeanFactory;
-import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.factory.support.DefaultBeanFactory;
 import pers.minispring.beans.factory.xml.XmlBeanDefinitionReader;
+import pers.minispring.core.io.ClassPathResource;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,22 +19,22 @@ public class BeanFactoryTest {
     private XmlBeanDefinitionReader reader = null;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         factory = new DefaultBeanFactory();
         reader = new XmlBeanDefinitionReader(factory);
     }
 
 
     @Test
-    public void testGetBean(){
+    public void testGetBean() {
 
-        reader.loadBeanDefinition("petstore-v1.xml");
+        reader.loadBeanDefinition(new ClassPathResource("petstore-v1.xml"));
 
         BeanDefinition beanDefinition = factory.getBeanDefinition("petStore");
 
         assertEquals("pers.minispring.PetStoreService", beanDefinition.getBeanClassName());
 
-        PetStoreService petStoreService = (PetStoreService)factory.getBean("petStore");
+        PetStoreService petStoreService = (PetStoreService) factory.getBean("petStore");
 
         assertNotNull(petStoreService);
     }
@@ -42,11 +42,11 @@ public class BeanFactoryTest {
     @Test
     public void testInvalidBean() {
 
-        reader.loadBeanDefinition("petstore-v1.xml");
+        reader.loadBeanDefinition(new ClassPathResource("petstore-v1.xml"));
 
         try {
             factory.getBean("invalidBean");
-        }catch (BeanCreationException e){
+        } catch (BeanCreationException e) {
             return;
         }
         Assert.fail("expect BeanCreationException");
@@ -56,8 +56,8 @@ public class BeanFactoryTest {
     public void testInvalidXML() {
 
         try {
-            reader.loadBeanDefinition("xxxx.xml");
-        }catch (BeanDefinitionStoreException e){
+            reader.loadBeanDefinition(new ClassPathResource("xxxx-v1.xml"));
+        } catch (BeanDefinitionStoreException e) {
             return;
         }
         Assert.fail("expect BeanDefinitionStoreException");
