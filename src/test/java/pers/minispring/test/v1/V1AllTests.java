@@ -1,4 +1,4 @@
-package pers.minispring;
+package pers.minispring.test.v1;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -8,6 +8,6 @@ import org.junit.runners.Suite;
         ApplicationContextTest.class,
         BeanFactoryTest.class,
         ResourceTest.class})
-public class AllTests {
+public class V1AllTests {
 
 }

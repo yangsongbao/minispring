@@ -1,9 +1,10 @@
-package pers.minispring;
+package pers.minispring.test.v1;
 
 import org.junit.Test;
 import pers.minispring.context.ApplicationContext;
 import pers.minispring.context.support.ClassPathXmlApplicationContext;
 import pers.minispring.context.support.FileSystemXmlApplicationContext;
+import pers.minispring.service.v1.PetStoreService;
 
 import java.net.URL;
 

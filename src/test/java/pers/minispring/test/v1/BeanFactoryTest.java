@@ -1,4 +1,4 @@
-package pers.minispring;
+package pers.minispring.test.v1;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,6 +9,7 @@ import pers.minispring.beans.factory.BeanDefinitionStoreException;
 import pers.minispring.beans.factory.support.DefaultBeanFactory;
 import pers.minispring.beans.factory.xml.XmlBeanDefinitionReader;
 import pers.minispring.core.io.ClassPathResource;
+import pers.minispring.service.v1.PetStoreService;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -38,7 +39,7 @@ public class BeanFactoryTest {
 
         assertFalse(beanDefinition.isPrototype());
 
-        assertEquals("pers.minispring.PetStoreService", beanDefinition.getBeanClassName());
+        assertEquals("pers.minispring.service.v1.PetStoreService", beanDefinition.getBeanClassName());
 
         PetStoreService petStoreService = (PetStoreService) factory.getBean("petStore");
 

@@ -1,4 +1,4 @@
-package pers.minispring;
+package pers.minispring.test.v1;
 
 import org.junit.Test;
 import pers.minispring.core.io.ClassPathResource;
