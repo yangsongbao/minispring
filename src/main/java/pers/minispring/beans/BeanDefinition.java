@@ -1,5 +1,7 @@
 package pers.minispring.beans;
 
+import java.util.List;
+
 /**
  * @author songbao.yang
  */
@@ -18,4 +20,8 @@ public interface BeanDefinition {
     void setScope(String scope);
 
     String getBeanClassName();
+
+    List<PropertyValue> getPropertyValues();
+
+
 }

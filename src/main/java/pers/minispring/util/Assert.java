@@ -11,4 +11,15 @@ public abstract class Assert {
         }
     }
 
+    public static void notEmpty(Object[] array, String message) {
+        if (ObjectUtils.isEmpty(array)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void hasLength(String text, String message) {
+        if (!StringUtils.hasLength(text)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 }

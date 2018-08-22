@@ -1,8 +1,15 @@
 package pers.minispring.beans.factory.support;
 
 import pers.minispring.beans.BeanDefinition;
+import pers.minispring.beans.PropertyValue;
 
-public class GenericBeanDefiniton implements BeanDefinition {
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author songbao.yang
+ */
+public class GenericBeanDefinition implements BeanDefinition {
 
     private String id;
     private String beanClassName;
@@ -10,10 +17,12 @@ public class GenericBeanDefiniton implements BeanDefinition {
     private boolean singleton = true;
     private boolean prototype = false;
     private String scope = SCOPE_DEFAULT;
+    private List<PropertyValue> propertyValues;
 
-    public GenericBeanDefiniton(String id, String beanClassName) {
+    public GenericBeanDefinition(String id, String beanClassName) {
         this.id = id;
         this.beanClassName = beanClassName;
+        this.propertyValues = new ArrayList<>(5);
     }
 
     @Override
@@ -41,5 +50,10 @@ public class GenericBeanDefiniton implements BeanDefinition {
     @Override
     public String getBeanClassName() {
         return this.beanClassName;
+    }
+
+    @Override
+    public List<PropertyValue> getPropertyValues() {
+        return this.propertyValues;
     }
 }

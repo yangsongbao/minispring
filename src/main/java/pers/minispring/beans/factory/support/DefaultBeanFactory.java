@@ -1,10 +1,18 @@
 package pers.minispring.beans.factory.support;
 
 import pers.minispring.beans.BeanDefinition;
+import pers.minispring.beans.PropertyValue;
+import pers.minispring.beans.SimpleTypeConverter;
+import pers.minispring.beans.TypeConverter;
 import pers.minispring.beans.factory.BeanCreationException;
 import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
 import pers.minispring.util.ClassUtils;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,7 +26,11 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     private ClassLoader beanClassLoader;
 
+    private SimpleTypeConverter converter;
+
+
     public DefaultBeanFactory() {
+        converter = new SimpleTypeConverter();
     }
 
     @Override
@@ -52,6 +64,42 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     }
 
     private Object createBean(BeanDefinition beanDefinition){
+        Object bean = instantiateBean(beanDefinition);
+        populateBean(beanDefinition, bean);
+        return bean;
+    }
+
+    private void populateBean(BeanDefinition beanDefinition, Object bean) {
+        List<PropertyValue> propertyValues = beanDefinition.getPropertyValues();
+
+        if (propertyValues == null || propertyValues.size() == 0){
+            return;
+        }
+
+        BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
+
+        try {
+            for (PropertyValue propertyValue : propertyValues){
+                String propertyName = propertyValue.getName();
+                Object originalValue = propertyValue.getValue();
+                Object resolvedValue = resolver.resolveValueIfNecessary(originalValue);
+                BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
+                PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+                for (PropertyDescriptor descriptor : propertyDescriptors){
+                    if (propertyName.equals(descriptor.getName())){
+                        Object convertedValue = converter.convertIfNecessary(resolvedValue, descriptor.getPropertyType());
+                        descriptor.getWriteMethod().invoke(bean, convertedValue);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new BeanCreationException("", e);
+        }
+
+    }
+
+    private Object instantiateBean(BeanDefinition beanDefinition){
         ClassLoader loader = this.getBeanClassLoader();
         String beanClassName = beanDefinition.getBeanClassName();
 
