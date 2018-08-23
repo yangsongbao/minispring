@@ -3,13 +3,11 @@ package pers.minispring.beans.factory.support;
 import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.PropertyValue;
 import pers.minispring.beans.SimpleTypeConverter;
-import pers.minispring.beans.TypeConverter;
 import pers.minispring.beans.factory.BeanCreationException;
 import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
 import pers.minispring.util.ClassUtils;
 
 import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.List;
@@ -28,9 +26,12 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     private SimpleTypeConverter converter;
 
+    private ConstructorResolver constructorResolver;
+
 
     public DefaultBeanFactory() {
         converter = new SimpleTypeConverter();
+        constructorResolver = new ConstructorResolver(this);
     }
 
     @Override
@@ -100,9 +101,12 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     }
 
     private Object instantiateBean(BeanDefinition beanDefinition){
+        if (beanDefinition.hasConstructorArgumentValues()){
+            return this.constructorResolver.autoWireConstructor(beanDefinition);
+        }
+
         ClassLoader loader = this.getBeanClassLoader();
         String beanClassName = beanDefinition.getBeanClassName();
-
         try {
             Class<?> aClass = loader.loadClass(beanClassName);
             //必须有无参构造函数

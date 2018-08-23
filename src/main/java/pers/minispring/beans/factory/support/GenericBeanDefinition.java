@@ -1,6 +1,7 @@
 package pers.minispring.beans.factory.support;
 
 import pers.minispring.beans.BeanDefinition;
+import pers.minispring.beans.ConstructorArgument;
 import pers.minispring.beans.PropertyValue;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class GenericBeanDefinition implements BeanDefinition {
     private boolean prototype = false;
     private String scope = SCOPE_DEFAULT;
     private List<PropertyValue> propertyValues;
+    private ConstructorArgument  constructorArgument = new ConstructorArgument();
 
     public GenericBeanDefinition(String id, String beanClassName) {
         this.id = id;
@@ -56,4 +58,20 @@ public class GenericBeanDefinition implements BeanDefinition {
     public List<PropertyValue> getPropertyValues() {
         return this.propertyValues;
     }
+
+    @Override
+    public ConstructorArgument getConstructorArgument() {
+        return this.constructorArgument;
+    }
+
+    @Override
+    public boolean hasConstructorArgumentValues() {
+        return constructorArgument != null && !constructorArgument.isEmpty();
+    }
+
+    @Override
+    public String getID() {
+        return this.getID();
+    }
+
 }

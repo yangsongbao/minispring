@@ -19,6 +19,16 @@ public class BeanCreationException extends BeansException {
         this.beanName = beanName;
     }
 
+    public BeanCreationException(String beanName, String message) {
+        super("Error creating bean with name '" + beanName + "': " + message);
+        this.beanName = beanName;
+    }
+
+    public BeanCreationException(String beanName, String message, ClassNotFoundException e) {
+        super("Error creating bean with name '" + beanName + "': " + message, e);
+        this.beanName = beanName;
+    }
+
     public String getBeanName() {
         return beanName;
     }

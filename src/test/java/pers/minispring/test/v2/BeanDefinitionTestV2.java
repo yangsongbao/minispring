@@ -20,7 +20,7 @@ public class BeanDefinitionTestV2 {
         DefaultBeanFactory factory = new DefaultBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
 
-        reader.loadBeanDefinition(new ClassPathResource("petstore-v2.xml"));
+        reader.loadBeanDefinitions(new ClassPathResource("petstore-v2.xml"));
 
         BeanDefinition definition = factory.getBeanDefinition("petStore");
 
