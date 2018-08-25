@@ -12,9 +12,7 @@ import pers.minispring.core.io.ClassPathResource;
 import pers.minispring.service.v1.PetStoreService;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class BeanFactoryTest {
 
@@ -45,7 +43,7 @@ public class BeanFactoryTest {
 
         assertNotNull(petStoreService);
 
-        PetStoreService petStoreService1 = (PetStoreService)factory.getBean("petStore");
+        PetStoreService petStoreService1 = (PetStoreService) factory.getBean("petStore");
 
         Assert.assertTrue(petStoreService.equals(petStoreService1));
     }

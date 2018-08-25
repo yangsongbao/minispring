@@ -12,9 +12,8 @@ import pers.minispring.service.v3.PetStoreService;
 public class ConstructorResolverTest {
 
 
-
     @Test
-    public void testConstructorResolver(){
+    public void testConstructorResolver() {
 
         DefaultBeanFactory factory = new DefaultBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
@@ -24,7 +23,7 @@ public class ConstructorResolverTest {
 
         ConstructorResolver resolver = new ConstructorResolver(factory);
 
-        PetStoreService petStoreService = (PetStoreService)resolver.autoWireConstructor(definition);
+        PetStoreService petStoreService = (PetStoreService) resolver.autoWireConstructor(definition);
 
         Assert.assertEquals(1, petStoreService.getVersion());
 

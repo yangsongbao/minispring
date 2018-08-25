@@ -3,6 +3,7 @@ package pers.minispring.core.io;
 import pers.minispring.util.ClassUtils;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -23,7 +24,7 @@ public class ClassPathResource implements Resource {
     }
 
     @Override
-    public InputStream getInputStream() throws Exception {
+    public InputStream getInputStream() throws IOException {
         InputStream inputStream = this.classLoader.getResourceAsStream(path);
         if (inputStream == null) {
             throw new FileNotFoundException(path + " cannot be opened");

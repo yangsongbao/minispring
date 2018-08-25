@@ -15,7 +15,7 @@ public class ConstructorArgument {
         argumentValues = new LinkedList<ValueHolder>();
     }
 
-    public void addArgumentValue(ValueHolder valueHolder){
+    public void addArgumentValue(ValueHolder valueHolder) {
         this.argumentValues.add(valueHolder);
     }
 
@@ -35,7 +35,7 @@ public class ConstructorArgument {
         this.argumentValues.clear();
     }
 
-    public static class ValueHolder{
+    public static class ValueHolder {
 
         private Object value;
         private String type;
@@ -56,28 +56,28 @@ public class ConstructorArgument {
             this.name = name;
         }
 
-        public void setValue(Object value) {
-            this.value = value;
-        }
-
         public Object getValue() {
             return this.value;
         }
 
-        public void setType(String type) {
-            this.type = type;
+        public void setValue(Object value) {
+            this.value = value;
         }
 
         public String getType() {
             return this.type;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setType(String type) {
+            this.type = type;
         }
 
         public String getName() {
             return this.name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 

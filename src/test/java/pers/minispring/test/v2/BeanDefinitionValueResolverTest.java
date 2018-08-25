@@ -18,7 +18,7 @@ public class BeanDefinitionValueResolverTest {
     private BeanDefinitionValueResolver resolver;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         factory = new DefaultBeanFactory();
         reader = new XmlBeanDefinitionReader(factory);
         reader.loadBeanDefinitions(new ClassPathResource("petstore-v2.xml"));
@@ -26,7 +26,7 @@ public class BeanDefinitionValueResolverTest {
     }
 
     @Test
-    public void testResolveRuntimeBeanReference(){
+    public void testResolveRuntimeBeanReference() {
         RuntimeBeanReference reference = new RuntimeBeanReference("accountDao");
         Object value = resolver.resolveValueIfNecessary(reference);
 
@@ -35,7 +35,7 @@ public class BeanDefinitionValueResolverTest {
     }
 
     @Test
-    public void testResolveTypedStringValue(){
+    public void testResolveTypedStringValue() {
         TypedStringValue stringValue = new TypedStringValue("test");
         Object value = resolver.resolveValueIfNecessary(stringValue);
 

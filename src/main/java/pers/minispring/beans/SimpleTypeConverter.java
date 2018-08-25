@@ -20,17 +20,17 @@ public class SimpleTypeConverter implements TypeConverter {
 
     @Override
     public <T> T convertIfNecessary(Object value, Class<T> requiredType) throws TypeMismatchException {
-        if (ClassUtils.isAssignableValue(requiredType, value)){
+        if (ClassUtils.isAssignableValue(requiredType, value)) {
             return (T) value;
         } else {
-            if (value instanceof String){
+            if (value instanceof String) {
                 PropertyEditor editor = findDefaultEditor(requiredType);
                 try {
-                    editor.setAsText((String)value);
-                } catch (IllegalArgumentException e){
+                    editor.setAsText((String) value);
+                } catch (IllegalArgumentException e) {
                     throw new TypeMismatchException(value, requiredType);
                 }
-                return (T)editor.getValue();
+                return (T) editor.getValue();
             } else {
                 throw new RuntimeException("Editor for " + requiredType + " has not been implemented");
             }
@@ -39,8 +39,8 @@ public class SimpleTypeConverter implements TypeConverter {
 
     private <T> PropertyEditor findDefaultEditor(Class<T> requiredType) {
         PropertyEditor editor = this.getDefaultEditor(requiredType);
-        if (editor == null){
-            throw new RuntimeException("Editor for "+ requiredType +" has not been implemented");
+        if (editor == null) {
+            throw new RuntimeException("Editor for " + requiredType + " has not been implemented");
         }
         return editor;
     }

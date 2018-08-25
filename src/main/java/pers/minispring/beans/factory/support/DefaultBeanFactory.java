@@ -51,9 +51,9 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
             throw new BeanCreationException("Bean Definition does not exist");
         }
 
-        if (beanDefinition.isSingleton()){
+        if (beanDefinition.isSingleton()) {
             Object singleton = this.getSingleton(beanID);
-            if (singleton == null){
+            if (singleton == null) {
                 singleton = createBean(beanDefinition);
                 this.registerSingleton(beanID, singleton);
             }
@@ -64,7 +64,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     }
 
-    private Object createBean(BeanDefinition beanDefinition){
+    private Object createBean(BeanDefinition beanDefinition) {
         Object bean = instantiateBean(beanDefinition);
         populateBean(beanDefinition, bean);
         return bean;
@@ -73,21 +73,21 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     private void populateBean(BeanDefinition beanDefinition, Object bean) {
         List<PropertyValue> propertyValues = beanDefinition.getPropertyValues();
 
-        if (propertyValues == null || propertyValues.size() == 0){
+        if (propertyValues == null || propertyValues.size() == 0) {
             return;
         }
 
         BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
 
         try {
-            for (PropertyValue propertyValue : propertyValues){
+            for (PropertyValue propertyValue : propertyValues) {
                 String propertyName = propertyValue.getName();
                 Object originalValue = propertyValue.getValue();
                 Object resolvedValue = resolver.resolveValueIfNecessary(originalValue);
                 BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
                 PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-                for (PropertyDescriptor descriptor : propertyDescriptors){
-                    if (propertyName.equals(descriptor.getName())){
+                for (PropertyDescriptor descriptor : propertyDescriptors) {
+                    if (propertyName.equals(descriptor.getName())) {
                         Object convertedValue = converter.convertIfNecessary(resolvedValue, descriptor.getPropertyType());
                         descriptor.getWriteMethod().invoke(bean, convertedValue);
                         break;
@@ -100,8 +100,8 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     }
 
-    private Object instantiateBean(BeanDefinition beanDefinition){
-        if (beanDefinition.hasConstructorArgumentValues()){
+    private Object instantiateBean(BeanDefinition beanDefinition) {
+        if (beanDefinition.hasConstructorArgumentValues()) {
             return this.constructorResolver.autoWireConstructor(beanDefinition);
         }
 

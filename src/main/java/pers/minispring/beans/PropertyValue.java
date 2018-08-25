@@ -26,15 +26,15 @@ public class PropertyValue {
         return value;
     }
 
-    public synchronized boolean isConverted(){
+    public synchronized boolean isConverted() {
         return this.converted;
-    }
-
-    public synchronized void setConvertedValue(Object convertedValue) {
-        this.convertedValue = convertedValue;
     }
 
     public synchronized Object getConvertedValue() {
         return convertedValue;
+    }
+
+    public synchronized void setConvertedValue(Object convertedValue) {
+        this.convertedValue = convertedValue;
     }
 }

@@ -17,7 +17,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     public void registerSingleton(String beanName, Object singletonObject) {
         Assert.notNull(beanName, "beanName must not be null");
         Object oldObject = this.singletonObjects.get(beanName);
-        if (oldObject != null){
+        if (oldObject != null) {
             throw new IllegalStateException("Could not register object [" + singletonObject +
                     "] under bean name '" + beanName + "': there is already object [" + oldObject + "] bound");
         }

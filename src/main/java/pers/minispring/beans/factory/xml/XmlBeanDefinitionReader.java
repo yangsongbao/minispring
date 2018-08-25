@@ -15,7 +15,6 @@ import pers.minispring.beans.factory.support.GenericBeanDefinition;
 import pers.minispring.core.io.Resource;
 import pers.minispring.util.StringUtils;
 
-import java.awt.geom.Ellipse2D;
 import java.io.InputStream;
 import java.util.Iterator;
 
@@ -56,7 +55,7 @@ public class XmlBeanDefinitionReader {
                 String id = element.attributeValue(ID_ATTRIBUTE);
                 String beanClassName = element.attributeValue(CLASS_ATTRIBUTE);
                 BeanDefinition beanDefinition = new GenericBeanDefinition(id, beanClassName);
-                if (element.attribute(SCOPE_ATTRIBUTE) != null){
+                if (element.attribute(SCOPE_ATTRIBUTE) != null) {
                     beanDefinition.setScope(element.attributeValue(SCOPE_ATTRIBUTE));
                 }
                 parseConstructorArgElements(element, beanDefinition);
@@ -70,8 +69,8 @@ public class XmlBeanDefinitionReader {
 
     private void parseConstructorArgElements(Element element, BeanDefinition beanDefinition) {
         Iterator iterator = element.elementIterator(CONSTRUCTOR_ARG_ATTRIBUTE);
-        while (iterator.hasNext()){
-            Element next = (Element)iterator.next();
+        while (iterator.hasNext()) {
+            Element next = (Element) iterator.next();
             parseConstructorArgElement(next, beanDefinition);
         }
     }
@@ -81,10 +80,10 @@ public class XmlBeanDefinitionReader {
         String nameAttr = element.attributeValue(NAME_ATTRIBUTE);
         Object value = parsePropertyValue(element, beanDefinition, null);
         ConstructorArgument.ValueHolder valueHolder = new ConstructorArgument.ValueHolder(value);
-        if (!StringUtils.hasLength(typeAttr)){
+        if (!StringUtils.hasLength(typeAttr)) {
             valueHolder.setType(typeAttr);
         }
-        if (!StringUtils.hasLength(nameAttr)){
+        if (!StringUtils.hasLength(nameAttr)) {
             valueHolder.setName(nameAttr);
         }
         beanDefinition.getConstructorArgument().addArgumentValue(valueHolder);
@@ -92,10 +91,10 @@ public class XmlBeanDefinitionReader {
 
     private void parsePropertyElement(Element element, BeanDefinition beanDefinition) {
         Iterator iterator = element.elementIterator(PROPERTY_ELEMENT);
-        while (iterator.hasNext()){
-            Element propertyElement = (Element)iterator.next();
+        while (iterator.hasNext()) {
+            Element propertyElement = (Element) iterator.next();
             String propertyName = propertyElement.attributeValue(NAME_ATTRIBUTE);
-            if (!StringUtils.hasLength(propertyName)){
+            if (!StringUtils.hasLength(propertyName)) {
                 log.error("Tag 'property' nust have a 'name' attribute");
                 continue;
             }
@@ -113,13 +112,13 @@ public class XmlBeanDefinitionReader {
         boolean hasRefAttribute = (propertyElement.attribute(REF_ATTRIBUTE) != null);
         boolean hasValueAttribute = (propertyElement.attribute(VALUE_ATTRIBUTE) != null);
 
-        if (hasRefAttribute){
+        if (hasRefAttribute) {
             String refName = propertyElement.attributeValue(REF_ATTRIBUTE);
-            if (!StringUtils.hasText(refName)){
+            if (!StringUtils.hasText(refName)) {
                 log.error(elementName + " contains empty 'ref' attribute");
             }
             return new RuntimeBeanReference(refName);
-        } else if (hasValueAttribute){
+        } else if (hasValueAttribute) {
             return new TypedStringValue(propertyElement.attributeValue(VALUE_ATTRIBUTE));
         } else {
             //todo

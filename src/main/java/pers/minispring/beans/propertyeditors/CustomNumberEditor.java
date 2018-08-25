@@ -22,7 +22,7 @@ public class CustomNumberEditor extends PropertyEditorSupport {
     }
 
     public CustomNumberEditor(Class<? extends Number> numberClass, NumberFormat numberFormat, boolean allowEmpty) throws IllegalArgumentException {
-        if (numberClass == null || !Number.class.isAssignableFrom(numberClass)){
+        if (numberClass == null || !Number.class.isAssignableFrom(numberClass)) {
             throw new IllegalArgumentException("Property class must be a subclass of Number");
         }
         this.numberClass = numberClass;
@@ -32,9 +32,9 @@ public class CustomNumberEditor extends PropertyEditorSupport {
 
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        if (this.allowEmpty && !StringUtils.hasText(text)){
+        if (this.allowEmpty && !StringUtils.hasText(text)) {
             setValue(null);
-        } else if (this.numberFormat != null){
+        } else if (this.numberFormat != null) {
             setValue(NumberUtils.parseNumber(text, numberClass, this.numberFormat));
         } else {
             setValue(NumberUtils.parseNumber(text, numberClass));
@@ -43,8 +43,8 @@ public class CustomNumberEditor extends PropertyEditorSupport {
 
     @Override
     public void setValue(Object value) {
-        if (value instanceof Number){
-            super.setValue(NumberUtils.convertNumberToTargetClass(((Number)value), this.numberClass));
+        if (value instanceof Number) {
+            super.setValue(NumberUtils.convertNumberToTargetClass(((Number) value), this.numberClass));
         } else {
             super.setValue(value);
         }

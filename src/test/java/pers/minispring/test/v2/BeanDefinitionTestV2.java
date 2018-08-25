@@ -15,7 +15,7 @@ public class BeanDefinitionTestV2 {
 
 
     @Test
-    public void testGetBeanDefinition(){
+    public void testGetBeanDefinition() {
 
         DefaultBeanFactory factory = new DefaultBeanFactory();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
@@ -42,8 +42,8 @@ public class BeanDefinitionTestV2 {
     }
 
     private PropertyValue getPropertyValue(String name, List<PropertyValue> propertyValues) {
-        for (PropertyValue propertyValue : propertyValues){
-            if (propertyValue.getName().equals(name)){
+        for (PropertyValue propertyValue : propertyValues) {
+            if (propertyValue.getName().equals(name)) {
                 return propertyValue;
             }
         }

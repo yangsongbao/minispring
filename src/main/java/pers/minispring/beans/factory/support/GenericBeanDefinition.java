@@ -19,7 +19,7 @@ public class GenericBeanDefinition implements BeanDefinition {
     private boolean prototype = false;
     private String scope = SCOPE_DEFAULT;
     private List<PropertyValue> propertyValues;
-    private ConstructorArgument  constructorArgument = new ConstructorArgument();
+    private ConstructorArgument constructorArgument = new ConstructorArgument();
 
     public GenericBeanDefinition(String id, String beanClassName) {
         this.id = id;

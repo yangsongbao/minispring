@@ -44,19 +44,19 @@ public class ConstructorResolver {
 
         for (int i = 0; i < candidates.length; i++) {
             Class<?>[] parameterTypes = candidates[i].getParameterTypes();
-            if (parameterTypes.length != argument.getArgumentCount()){
+            if (parameterTypes.length != argument.getArgumentCount()) {
                 continue;
             }
             argsToUse = new Object[parameterTypes.length];
 
             boolean result = this.valuesMatchTypes(parameterTypes, argument.getArgumentValues(), argsToUse, resolver, converter);
-            if (result){
+            if (result) {
                 constructorToUse = candidates[i];
                 break;
             }
         }
 
-        if (constructorToUse == null){
+        if (constructorToUse == null) {
             throw new BeanCreationException(definition.getID(), "can not find a appropriate constructor");
         }
 
@@ -82,7 +82,7 @@ public class ConstructorResolver {
                 //如果转型失败，则抛出异常。说明这个构造函数不可用
                 Object convertedValue = converter.convertIfNecessary(resolvedValue, parameterTypes[i]);
                 argsToUse[i] = convertedValue;
-            } catch (Exception e){
+            } catch (Exception e) {
                 log.error("", e);
                 return false;
             }

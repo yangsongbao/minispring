@@ -2,15 +2,15 @@ package pers.minispring.test.v2;
 
 import org.junit.Assert;
 import org.junit.Test;
-import pers.minispring.beans.TypeMismatchException;
 import pers.minispring.beans.SimpleTypeConverter;
+import pers.minispring.beans.TypeMismatchException;
 
 import static org.junit.Assert.fail;
 
 public class TypeConverterTest {
 
     @Test
-    public void testConvertStringToInt(){
+    public void testConvertStringToInt() {
         SimpleTypeConverter converter = new SimpleTypeConverter();
 
         Integer i = converter.convertIfNecessary("3", Integer.class);
@@ -18,15 +18,15 @@ public class TypeConverterTest {
         Assert.assertEquals(3, i.intValue());
 
         try {
-           converter.convertIfNecessary("3.1", Integer.class);
-        } catch (TypeMismatchException e){
+            converter.convertIfNecessary("3.1", Integer.class);
+        } catch (TypeMismatchException e) {
             return;
         }
         fail();
     }
 
     @Test
-    public void testConvertStringToBoolean(){
+    public void testConvertStringToBoolean() {
         SimpleTypeConverter converter = new SimpleTypeConverter();
 
         Boolean b = converter.convertIfNecessary("true", Boolean.class);
@@ -35,7 +35,7 @@ public class TypeConverterTest {
 
         try {
             converter.convertIfNecessary("33434", Boolean.class);
-        } catch (TypeMismatchException e){
+        } catch (TypeMismatchException e) {
             return;
         }
         fail();
