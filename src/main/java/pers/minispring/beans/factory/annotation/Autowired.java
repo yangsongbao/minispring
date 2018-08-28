@@ -1,4 +1,4 @@
-package pers.minispring.beans.factory;
+package pers.minispring.beans.factory.annotation;
 
 import java.lang.annotation.*;
 

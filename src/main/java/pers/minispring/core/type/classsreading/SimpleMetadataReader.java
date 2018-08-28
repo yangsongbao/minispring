@@ -1,7 +1,6 @@
 package pers.minispring.core.type.classsreading;
 
 import org.objectweb.asm.ClassReader;
-import pers.minispring.core.io.ClassPathResource;
 import pers.minispring.core.io.Resource;
 import pers.minispring.core.type.AnnotationMetadata;
 import pers.minispring.core.type.ClassMetadata;
@@ -21,7 +20,7 @@ public class SimpleMetadataReader implements MetadataReader {
     private final AnnotationMetadata annotationMetadata;
 
 
-    public SimpleMetadataReader(ClassPathResource resource) throws IOException {
+    public SimpleMetadataReader(Resource resource) throws IOException {
         BufferedInputStream inputStream = new BufferedInputStream(resource.getInputStream());
         ClassReader classReader;
 

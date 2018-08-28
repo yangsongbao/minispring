@@ -5,6 +5,7 @@ import pers.minispring.beans.PropertyValue;
 import pers.minispring.beans.SimpleTypeConverter;
 import pers.minispring.beans.factory.BeanCreationException;
 import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
+import pers.minispring.beans.factory.config.DependencyDescriptor;
 import pers.minispring.util.ClassUtils;
 
 import java.beans.BeanInfo;
@@ -95,7 +96,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
                 }
             }
         } catch (Exception e) {
-            throw new BeanCreationException("", e);
+            throw new BeanCreationException("Failed to obtain BeanInfo for class [" + beanDefinition.getBeanClassName() + "]", e);
         }
 
     }
@@ -124,5 +125,30 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
         this.beanClassLoader = classLoader;
+    }
+
+    @Override
+    public Object resolveDependency(DependencyDescriptor descriptor) {
+        Class<?> typeToMatch = descriptor.getDependencyType();
+        for(BeanDefinition bd: this.beanDefinitionMap.values()){
+            resolveBeanClass(bd);
+            Class<?> beanClass = bd.getBeanClass();
+            if(typeToMatch.isAssignableFrom(beanClass)){
+                return this.getBean(bd.getID());
+            }
+        }
+        return null;
+    }
+
+    public void resolveBeanClass(BeanDefinition bd) {
+        if(bd.hasBeanClass()){
+            return;
+        } else{
+            try {
+                bd.resolveBeanClass(this.getBeanClassLoader());
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("can't load class:"+bd.getBeanClassName());
+            }
+        }
     }
 }

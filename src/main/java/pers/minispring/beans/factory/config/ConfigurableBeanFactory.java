@@ -1,11 +1,9 @@
 package pers.minispring.beans.factory.config;
 
-import pers.minispring.beans.factory.BeanFactory;
-
 /**
  * @author songbao.yang
  */
-public interface ConfigurableBeanFactory extends BeanFactory {
+public interface ConfigurableBeanFactory extends AutowireCapableBeanFactory {
 
     ClassLoader getBeanClassLoader();
 
