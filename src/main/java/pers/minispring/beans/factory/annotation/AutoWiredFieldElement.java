@@ -1,8 +1,9 @@
 package pers.minispring.beans.factory.annotation;
 
+
 import pers.minispring.beans.factory.BeanCreationException;
+import pers.minispring.beans.factory.config.AutowireCapableBeanFactory;
 import pers.minispring.beans.factory.config.DependencyDescriptor;
-import pers.minispring.beans.factory.support.DefaultBeanFactory;
 import pers.minispring.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -11,31 +12,32 @@ import java.lang.reflect.Field;
  * @author songbao.yang
  */
 public class AutoWiredFieldElement extends InjectionElement {
+    boolean required;
 
-    private boolean required;
-
-    public AutoWiredFieldElement(Field field, boolean required, DefaultBeanFactory factory) {
-        super(field, factory);
+    public AutoWiredFieldElement(Field f, boolean required, AutowireCapableBeanFactory factory) {
+        super(f, factory);
         this.required = required;
+    }
+
+    public Field getField() {
+        return (Field) this.member;
     }
 
     @Override
     public void inject(Object target) {
-        Field field = this.getField();
 
+        Field field = this.getField();
         try {
-            DependencyDescriptor descriptor = new DependencyDescriptor(field, this.required);
-            Object value = factory.resolveDependency(descriptor);
-            if (value != null){
+            DependencyDescriptor desc = new DependencyDescriptor(field, this.required);
+            Object value = factory.resolveDependency(desc);
+
+            if (value != null) {
                 ReflectionUtils.makeAccessible(field);
                 field.set(target, value);
             }
-        } catch (Throwable throwable){
-            throw new BeanCreationException("Can not autowired field: " + field, throwable);
+        } catch (Throwable ex) {
+            throw new BeanCreationException("Could not autowire field: " + field, ex);
         }
     }
 
-    private Field getField() {
-        return (Field)member;
-    }
 }

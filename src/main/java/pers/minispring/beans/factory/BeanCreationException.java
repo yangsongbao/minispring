@@ -2,38 +2,33 @@ package pers.minispring.beans.factory;
 
 import pers.minispring.beans.BeansException;
 
+/**
+ * @author songbao.yang
+ */
 public class BeanCreationException extends BeansException {
 
     private String beanName;
 
-    public BeanCreationException(String message) {
-        super(message);
+    public BeanCreationException(String msg) {
+        super(msg);
+
     }
 
-    public BeanCreationException(String message, Throwable cause) {
-        super(message, cause);
+    public BeanCreationException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
-    public BeanCreationException(String message, Throwable cause, String beanName) {
-        super(message, cause);
+    public BeanCreationException(String beanName, String msg) {
+        super("Error creating bean with name '" + beanName + "': " + msg);
         this.beanName = beanName;
     }
 
-    public BeanCreationException(String beanName, String message) {
-        super("Error creating bean with name '" + beanName + "': " + message);
-        this.beanName = beanName;
-    }
-
-    public BeanCreationException(String beanName, String message, ClassNotFoundException e) {
-        super("Error creating bean with name '" + beanName + "': " + message, e);
-        this.beanName = beanName;
+    public BeanCreationException(String beanName, String msg, Throwable cause) {
+        this(beanName, msg);
+        initCause(cause);
     }
 
     public String getBeanName() {
-        return beanName;
-    }
-
-    public void setBeanName(String beanName) {
-        this.beanName = beanName;
+        return this.beanName;
     }
 }

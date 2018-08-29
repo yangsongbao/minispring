@@ -20,7 +20,7 @@ public class AnnotationMetadataReadingVisitor extends ClassMetadataReadingVisito
     private final Set<String> annotationSet = new LinkedHashSet<String>(4);
     private final Map<String, AnnotationAttributes> attributeMap = new LinkedHashMap<String, AnnotationAttributes>(4);
 
-    public AnnotationMetadataReadingVisitor( ) {
+    public AnnotationMetadataReadingVisitor() {
         super(Opcodes.ASM5);
     }
 

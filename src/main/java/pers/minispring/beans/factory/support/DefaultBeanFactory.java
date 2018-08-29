@@ -130,10 +130,10 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     @Override
     public Object resolveDependency(DependencyDescriptor descriptor) {
         Class<?> typeToMatch = descriptor.getDependencyType();
-        for(BeanDefinition bd: this.beanDefinitionMap.values()){
+        for (BeanDefinition bd : this.beanDefinitionMap.values()) {
             resolveBeanClass(bd);
             Class<?> beanClass = bd.getBeanClass();
-            if(typeToMatch.isAssignableFrom(beanClass)){
+            if (typeToMatch.isAssignableFrom(beanClass)) {
                 return this.getBean(bd.getID());
             }
         }
@@ -141,13 +141,13 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     }
 
     public void resolveBeanClass(BeanDefinition bd) {
-        if(bd.hasBeanClass()){
+        if (bd.hasBeanClass()) {
             return;
-        } else{
+        } else {
             try {
                 bd.resolveBeanClass(this.getBeanClassLoader());
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException("can't load class:"+bd.getBeanClassName());
+                throw new RuntimeException("can't load class:" + bd.getBeanClassName());
             }
         }
     }

@@ -32,7 +32,7 @@ public class ClassReaderTest {
     }
 
     @Test
-    public void testGetAnnotation() throws IOException{
+    public void testGetAnnotation() throws IOException {
         ClassPathResource resource = new ClassPathResource("pers/minispring/service/v4/PetStoreService.class");
         ClassReader reader = new ClassReader(resource.getInputStream());
 

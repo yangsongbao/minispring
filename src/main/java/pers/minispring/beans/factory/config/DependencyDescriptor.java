@@ -19,8 +19,8 @@ public class DependencyDescriptor {
         this.required = required;
     }
 
-    public Class<?> getDependencyType(){
-        if (this.field != null){
+    public Class<?> getDependencyType() {
+        if (this.field != null) {
             return field.getType();
         }
         throw new RuntimeException("only support field dependency");

@@ -4,27 +4,26 @@ import org.junit.Assert;
 import org.junit.Test;
 import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.factory.support.DefaultBeanFactory;
-import pers.minispring.context.annotation.ClassPathBeanDefinitionScanner;
+import pers.minispring.beans.factory.xml.XmlBeanDefinitionReader;
 import pers.minispring.context.annotation.ScannedGenericBeanDefinition;
 import pers.minispring.core.annotation.AnnotationAttributes;
+import pers.minispring.core.io.ClassPathResource;
+import pers.minispring.core.io.Resource;
 import pers.minispring.core.type.AnnotationMetadata;
 import pers.minispring.stereotype.Component;
 
-public class ClassPathBeanDefinitionScannerTest {
-
+public class XmlBeanDefinitionReaderTest {
 
     @Test
     public void testParseScanedBean() {
 
         DefaultBeanFactory factory = new DefaultBeanFactory();
-
-        String basePackages = "pers.minispring.dao.v4, pers.minispring.service.v4";
-
-        ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(factory);
-        scanner.doScan(basePackages);
-
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+        Resource resource = new ClassPathResource("petstore-v4.xml");
+        reader.loadBeanDefinitions(resource);
         String annotation = Component.class.getName();
 
+        //下面的代码和ClassPathBeanDefinitionScannerTest重复，该怎么处理？
         {
             BeanDefinition bd = factory.getBeanDefinition("petStore");
             Assert.assertTrue(bd instanceof ScannedGenericBeanDefinition);
@@ -51,4 +50,5 @@ public class ClassPathBeanDefinitionScannerTest {
             Assert.assertTrue(amd.hasAnnotation(annotation));
         }
     }
+
 }

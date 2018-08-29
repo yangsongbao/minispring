@@ -1,7 +1,8 @@
 package pers.minispring.core.type.classsreading;
 
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.Opcodes;
 import pers.minispring.core.type.ClassMetadata;
 import pers.minispring.util.ClassUtils;
 

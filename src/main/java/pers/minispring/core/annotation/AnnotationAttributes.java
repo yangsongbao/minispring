@@ -2,11 +2,10 @@ package pers.minispring.core.annotation;
 
 import pers.minispring.util.Assert;
 
-import static java.lang.String.format;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.lang.String.format;
 
 
 @SuppressWarnings("serial")
@@ -21,6 +20,7 @@ public class AnnotationAttributes extends LinkedHashMap<String, Object> {
     /**
      * Create a new, empty {@link AnnotationAttributes} instance with the given initial
      * capacity to optimize performance.
+     *
      * @param initialCapacity initial size of the underlying map
      */
     public AnnotationAttributes(int initialCapacity) {

@@ -19,11 +19,11 @@ public class InjectionMetadata {
         return injectionElements;
     }
 
-    public void inject(Object target){
-        if (injectionElements == null || injectionElements.isEmpty()){
+    public void inject(Object target) {
+        if (injectionElements == null || injectionElements.isEmpty()) {
             return;
         }
-        for (InjectionElement injectionElement : injectionElements){
+        for (InjectionElement injectionElement : injectionElements) {
             injectionElement.inject(target);
         }
     }

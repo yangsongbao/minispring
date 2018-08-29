@@ -25,18 +25,17 @@ import java.util.Iterator;
 @Slf4j
 public class XmlBeanDefinitionReader {
 
+    public static final String BEANS_NAMESPACE_URI = "http://www.springframework.org/schema/beans";
+    public static final String CONTEXT_NAMESPACE_URI = "http://www.springframework.org/schema/context";
     private static final String ID_ATTRIBUTE = "id";
     private static final String CLASS_ATTRIBUTE = "class";
     private static final String SCOPE_ATTRIBUTE = "scope";
-
     private static final String PROPERTY_ELEMENT = "property";
     private static final String REF_ATTRIBUTE = "ref";
     private static final String VALUE_ATTRIBUTE = "value";
     private static final String NAME_ATTRIBUTE = "name";
     private static final String CONSTRUCTOR_ARG_ATTRIBUTE = "constructor-arg";
     private static final String TYPE_ATTRIBUTE = "type";
-    public static final String BEANS_NAMESPACE_URI = "http://www.springframework.org/schema/beans";
-    public static final String CONTEXT_NAMESPACE_URI = "http://www.springframework.org/schema/context";
     private static final String BASE_PACKAGE_ATTRIBUTE = "base-package";
 
     private BeanDefinitionRegistry registry;
@@ -58,9 +57,9 @@ public class XmlBeanDefinitionReader {
             while (iterator.hasNext()) {
                 Element element = (Element) iterator.next();
                 String namespaceUri = element.getNamespaceURI();
-                if(this.isDefaultNamespace(namespaceUri)){
+                if (this.isDefaultNamespace(namespaceUri)) {
                     parseDefaultElement(element);
-                } else if(this.isContextNamespace(namespaceUri)){
+                } else if (this.isContextNamespace(namespaceUri)) {
                     parseComponentElement(element);
                 }
             }

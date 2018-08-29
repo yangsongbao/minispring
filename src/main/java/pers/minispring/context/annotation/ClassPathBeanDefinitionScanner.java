@@ -34,9 +34,9 @@ public class ClassPathBeanDefinitionScanner {
 
         String[] basePackages = StringUtils.tokenizeToStringArray(basePackageToScan, ",");
         Set<BeanDefinition> beanDefinitions = new LinkedHashSet<>();
-        for (String basePackage : basePackages){
-            Set<BeanDefinition>  candidates = findCandidateComponents(basePackage);
-            for (BeanDefinition candidate : candidates){
+        for (String basePackage : basePackages) {
+            Set<BeanDefinition> candidates = findCandidateComponents(basePackage);
+            for (BeanDefinition candidate : candidates) {
                 beanDefinitions.add(candidate);
                 registry.registryBeanDefinition(candidate.getID(), candidate);
             }
@@ -48,20 +48,20 @@ public class ClassPathBeanDefinitionScanner {
         Set<BeanDefinition> candidates = new LinkedHashSet<>();
         try {
             Resource[] resources = this.resourceLoader.getResources(basePackage);
-            for (Resource resource : resources){
+            for (Resource resource : resources) {
                 try {
                     SimpleMetadataReader reader = new SimpleMetadataReader(resource);
-                    if (reader.getAnnotationMetadata().hasAnnotation(Component.class.getName())){
+                    if (reader.getAnnotationMetadata().hasAnnotation(Component.class.getName())) {
                         ScannedGenericBeanDefinition beanDefinition = new ScannedGenericBeanDefinition(reader.getAnnotationMetadata());
                         String beanName = this.beanNameGenerator.generateBeanName(beanDefinition, this.registry);
                         beanDefinition.setId(beanName);
                         candidates.add(beanDefinition);
                     }
-                } catch (Throwable e){
+                } catch (Throwable e) {
                     throw new BeanDefinitionStoreException("Failed to read candidate component class: " + resource, e);
                 }
             }
-        } catch (Throwable e){
+        } catch (Throwable e) {
             throw new BeanDefinitionStoreException("I/O failure during classpath scanning", e);
         }
         return candidates;

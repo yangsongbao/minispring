@@ -30,7 +30,7 @@ public class AnnotationAttributesReadingVisitor extends AnnotationVisitor {
     }
 
     @Override
-    public final void visitEnd(){
+    public final void visitEnd() {
         this.attributesMap.put(this.annotationType, this.attributes);
     }
 }
