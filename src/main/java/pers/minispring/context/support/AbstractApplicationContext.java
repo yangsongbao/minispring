@@ -1,5 +1,6 @@
 package pers.minispring.context.support;
 
+import pers.minispring.beans.factory.NoSuchBeanDefinitionException;
 import pers.minispring.beans.factory.support.DefaultBeanFactory;
 import pers.minispring.beans.factory.xml.XmlBeanDefinitionReader;
 import pers.minispring.context.ApplicationContext;
@@ -39,5 +40,9 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 
     public void setBeanClassLoader(ClassLoader classLoader) {
         this.beanClassLoader = classLoader;
+    }
+
+    public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
+        return this.factory.getType(name);
     }
 }

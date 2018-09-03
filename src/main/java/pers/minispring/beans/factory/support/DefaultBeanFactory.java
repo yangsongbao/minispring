@@ -4,6 +4,7 @@ import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.PropertyValue;
 import pers.minispring.beans.SimpleTypeConverter;
 import pers.minispring.beans.factory.BeanCreationException;
+import pers.minispring.beans.factory.NoSuchBeanDefinitionException;
 import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
 import pers.minispring.beans.factory.config.DependencyDescriptor;
 import pers.minispring.util.ClassUtils;
@@ -63,6 +64,16 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
         return createBean(beanDefinition);
 
+    }
+
+    @Override
+    public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
+        BeanDefinition bd = this.getBeanDefinition(name);
+        if (bd == null) {
+            throw new NoSuchBeanDefinitionException(name);
+        }
+        resolveBeanClass(bd);
+        return bd.getBeanClass();
     }
 
     private Object createBean(BeanDefinition beanDefinition) {
