@@ -1,5 +1,6 @@
 package pers.minispring.beans.factory.support;
 
+import lombok.extern.slf4j.Slf4j;
 import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.PropertyValue;
 import pers.minispring.beans.SimpleTypeConverter;
@@ -24,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author songbao.yang
  */
+@Slf4j
 public class DefaultBeanFactory extends AbstractBeanFactory implements BeanDefinitionRegistry {
 
     private List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
@@ -103,7 +105,15 @@ public class DefaultBeanFactory extends AbstractBeanFactory implements BeanDefin
     private List<String> getBeanIDsByType(Class<?> type){
         List<String> result = new ArrayList<String>();
         for(String beanName :this.beanDefinitionMap.keySet()){
-            if(type.isAssignableFrom(this.getType(beanName))){
+            Class<?> beanClass = null;
+            try{
+                beanClass = this.getType(beanName);
+            }catch(Exception e){
+                log.warn("can't load class for bean :"+beanName+", skip it.");
+                continue;
+            }
+
+            if((beanClass != null) && type.isAssignableFrom(beanClass)){
                 result.add(beanName);
             }
         }

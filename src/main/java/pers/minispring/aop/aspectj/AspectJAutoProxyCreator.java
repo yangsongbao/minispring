@@ -7,6 +7,7 @@ import pers.minispring.aop.Pointcut;
 import pers.minispring.aop.framework.AopConfigSupport;
 import pers.minispring.aop.framework.AopProxyFactory;
 import pers.minispring.aop.framework.CglibProxyFactory;
+import pers.minispring.aop.framework.JdkAopProxyFactory;
 import pers.minispring.beans.BeansException;
 import pers.minispring.beans.factory.config.BeanPostProcessor;
 import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
@@ -73,12 +74,11 @@ public class AspectJAutoProxyCreator implements BeanPostProcessor {
 		
 		config.setTargetObject(bean);		
 		
-		AopProxyFactory proxyFactory = null;
+		AopProxyFactory proxyFactory;
 		if(config.getProxiedInterfaces().length == 0){
 			proxyFactory =  new CglibProxyFactory(config);
 		} else{
-			//TODO 需要实现JDK 代理
-			//proxyFactory = new JdkAopProxyFactory(config);
+			proxyFactory = new JdkAopProxyFactory(config);
 		}	
 	
 		
