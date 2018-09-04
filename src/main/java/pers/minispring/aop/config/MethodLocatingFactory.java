@@ -2,12 +2,14 @@ package pers.minispring.aop.config;
 
 
 import pers.minispring.beans.factory.BeanFactory;
+import pers.minispring.beans.factory.BeanFactoryAware;
+import pers.minispring.beans.factory.FactoryBean;
 import pers.minispring.util.BeanUtils;
 import pers.minispring.util.StringUtils;
 
 import java.lang.reflect.Method;
 
-public class MethodLocatingFactory {
+public class MethodLocatingFactory  implements FactoryBean<Method>, BeanFactoryAware {
 
     private String targetBeanName;
 
@@ -47,8 +49,14 @@ public class MethodLocatingFactory {
     }
 
 
+    @Override
     public Method getObject() throws Exception {
         return this.method;
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        return Method.class;
     }
 
 }
