@@ -1,6 +1,7 @@
 package pers.minispring.aop.aspectj;
 
 import org.aopalliance.intercept.MethodInvocation;
+import pers.minispring.aop.config.AspectInstanceFactory;
 
 import java.lang.reflect.Method;
 
@@ -10,10 +11,11 @@ import java.lang.reflect.Method;
  */
 public class AspectJBeforeAdvice extends AbstractAspectJAdvice {
 
-    public AspectJBeforeAdvice(Method adviceMethod, AspectJExpressionPointcut pointcut, Object adviceObject) {
+    public AspectJBeforeAdvice(Method adviceMethod, AspectJExpressionPointcut pointcut, AspectInstanceFactory adviceObject) {
         super(adviceMethod, pointcut, adviceObject);
     }
 
+    @Override
     public Object invoke(MethodInvocation mi) throws Throwable {
         //例如： 调用TransactionManager的start方法
         this.invokeAdviceMethod();

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import pers.minispring.aop.config.ConfigBeanDefinitionParser;
 import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.ConstructorArgument;
 import pers.minispring.beans.PropertyValue;
@@ -27,6 +28,8 @@ public class XmlBeanDefinitionReader {
 
     public static final String BEANS_NAMESPACE_URI = "http://www.springframework.org/schema/beans";
     public static final String CONTEXT_NAMESPACE_URI = "http://www.springframework.org/schema/context";
+    public static final String AOP_NAMESPACE_URI = "http://www.springframework.org/schema/aop";
+
     private static final String ID_ATTRIBUTE = "id";
     private static final String CLASS_ATTRIBUTE = "class";
     private static final String SCOPE_ATTRIBUTE = "scope";
@@ -61,6 +64,8 @@ public class XmlBeanDefinitionReader {
                     parseDefaultElement(element);
                 } else if (this.isContextNamespace(namespaceUri)) {
                     parseComponentElement(element);
+                }else if(this.isAOPNamespace(namespaceUri)){
+                    parseAOPElement(element);  //例如 <aop:config>
                 }
             }
         } catch (Exception e) {
@@ -77,7 +82,7 @@ public class XmlBeanDefinitionReader {
         }
         parseConstructorArgElements(element, beanDefinition);
         parsePropertyElement(element, beanDefinition);
-        registry.registryBeanDefinition(id, beanDefinition);
+        registry.registerBeanDefinition(id, beanDefinition);
     }
 
     private void parseComponentElement(Element element) {
@@ -86,12 +91,20 @@ public class XmlBeanDefinitionReader {
         scanner.doScan(basePackages);
     }
 
+    private void parseAOPElement(Element ele){
+        ConfigBeanDefinitionParser parser = new ConfigBeanDefinitionParser();
+        parser.parse(ele, this.registry);
+    }
+
     private boolean isContextNamespace(String namespaceUri) {
         return (!StringUtils.hasLength(namespaceUri) || CONTEXT_NAMESPACE_URI.equals(namespaceUri));
     }
 
     private boolean isDefaultNamespace(String namespaceUri) {
         return (!StringUtils.hasLength(namespaceUri) || BEANS_NAMESPACE_URI.equals(namespaceUri));
+    }
+    public boolean isAOPNamespace(String namespaceUri){
+        return (!StringUtils.hasLength(namespaceUri) || AOP_NAMESPACE_URI.equals(namespaceUri));
     }
 
     private void parseConstructorArgElements(Element element, BeanDefinition beanDefinition) {

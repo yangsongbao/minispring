@@ -7,6 +7,8 @@ import pers.minispring.context.ApplicationContext;
 import pers.minispring.core.io.Resource;
 import pers.minispring.util.ClassUtils;
 
+import java.util.List;
+
 /**
  * @author songbao.yang
  */
@@ -42,7 +44,13 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         this.beanClassLoader = classLoader;
     }
 
+    @Override
     public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
         return this.factory.getType(name);
+    }
+
+    @Override
+    public List<Object> getBeansByType(Class<?> type){
+        return this.factory.getBeansByType(type);
     }
 }

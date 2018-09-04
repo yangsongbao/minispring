@@ -1,6 +1,7 @@
 package pers.minispring.aop.aspectj;
 
 import org.aopalliance.intercept.MethodInvocation;
+import pers.minispring.aop.config.AspectInstanceFactory;
 
 import java.lang.reflect.Method;
 
@@ -9,7 +10,7 @@ import java.lang.reflect.Method;
  */
 public class AspectJAfterThrowingAdvice extends AbstractAspectJAdvice {
 
-    public AspectJAfterThrowingAdvice(Method adviceMethod, AspectJExpressionPointcut pointcut, Object adviceObject) {
+    public AspectJAfterThrowingAdvice(Method adviceMethod, AspectJExpressionPointcut pointcut, AspectInstanceFactory adviceObject) {
 
         super(adviceMethod, pointcut, adviceObject);
     }

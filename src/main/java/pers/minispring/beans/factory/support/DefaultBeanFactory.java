@@ -12,6 +12,7 @@ import pers.minispring.util.ClassUtils;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,7 +43,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
     }
 
     @Override
-    public void registryBeanDefinition(String beanID, BeanDefinition beanDefinition) {
+    public void registerBeanDefinition(String beanID, BeanDefinition beanDefinition) {
         this.beanDefinitionMap.put(beanID, beanDefinition);
     }
 
@@ -74,6 +75,26 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
         }
         resolveBeanClass(bd);
         return bd.getBeanClass();
+    }
+
+    @Override
+    public List<Object> getBeansByType(Class<?> type){
+        List<Object> result = new ArrayList<Object>();
+        List<String> beanIDs = this.getBeanIDsByType(type);
+        for(String beanID : beanIDs){
+            result.add(this.getBean(beanID));
+        }
+        return result;
+    }
+
+    private List<String> getBeanIDsByType(Class<?> type){
+        List<String> result = new ArrayList<String>();
+        for(String beanName :this.beanDefinitionMap.keySet()){
+            if(type.isAssignableFrom(this.getType(beanName))){
+                result.add(beanName);
+            }
+        }
+        return result;
     }
 
     private Object createBean(BeanDefinition beanDefinition) {

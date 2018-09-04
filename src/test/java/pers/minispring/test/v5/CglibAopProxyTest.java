@@ -6,21 +6,26 @@ import org.junit.Test;
 import pers.minispring.aop.aspectj.AspectJAfterReturningAdvice;
 import pers.minispring.aop.aspectj.AspectJBeforeAdvice;
 import pers.minispring.aop.aspectj.AspectJExpressionPointcut;
+import pers.minispring.aop.config.AspectInstanceFactory;
 import pers.minispring.aop.framework.AopConfig;
 import pers.minispring.aop.framework.AopConfigSupport;
 import pers.minispring.aop.framework.CglibProxyFactory;
+import pers.minispring.beans.factory.BeanFactory;
 import pers.minispring.service.v5.PetStoreService;
 import pers.minispring.tx.TransactionManager;
 import pers.minispring.util.MessageTracker;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 
-public class CglibAopProxyTest {
+public class CglibAopProxyTest extends AbstractV5Test {
 
     private static AspectJBeforeAdvice beforeAdvice = null;
     private static AspectJAfterReturningAdvice afterAdvice = null;
     private static AspectJExpressionPointcut pc = null;
+    private BeanFactory beanFactory = null;
+    private  AspectInstanceFactory aspectInstanceFactory = null;
 
     private TransactionManager tx;
 
@@ -35,15 +40,19 @@ public class CglibAopProxyTest {
 
         pc.setExpression(expression);
 
+        beanFactory = this.getBeanFactory("petstore-v5.xml");
+        aspectInstanceFactory = this.getAspectInstanceFactory("tx");
+        aspectInstanceFactory.setBeanFactory(beanFactory);
+
         beforeAdvice = new AspectJBeforeAdvice(
-                TransactionManager.class.getMethod("start"),
+                getAdviceMethod("start"),
                 pc,
-                tx);
+                aspectInstanceFactory);
 
         afterAdvice = new AspectJAfterReturningAdvice(
-                TransactionManager.class.getMethod("commit"),
+                getAdviceMethod("commit"),
                 pc,
-                tx);
+                aspectInstanceFactory);
     }
 
     @Test
@@ -69,6 +78,5 @@ public class CglibAopProxyTest {
 
         proxy.toString();
     }
-
 
 }
