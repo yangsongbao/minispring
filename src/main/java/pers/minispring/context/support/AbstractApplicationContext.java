@@ -1,6 +1,9 @@
 package pers.minispring.context.support;
 
+import pers.minispring.aop.aspectj.AspectJAutoProxyCreator;
 import pers.minispring.beans.factory.NoSuchBeanDefinitionException;
+import pers.minispring.beans.factory.annotation.AutowiredAnnotationProcessor;
+import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
 import pers.minispring.beans.factory.support.DefaultBeanFactory;
 import pers.minispring.beans.factory.xml.XmlBeanDefinitionReader;
 import pers.minispring.context.ApplicationContext;
@@ -27,6 +30,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         Resource resource = this.getResourceByPath(configFile);
         reader.loadBeanDefinitions(resource);
         factory.setBeanClassLoader(classLoader);
+        registerBeanPostProcessors(factory);
     }
 
     @Override
@@ -42,6 +46,19 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
 
     public void setBeanClassLoader(ClassLoader classLoader) {
         this.beanClassLoader = classLoader;
+    }
+
+    protected void registerBeanPostProcessors(ConfigurableBeanFactory beanFactory) {
+        {
+            AutowiredAnnotationProcessor postProcessor = new AutowiredAnnotationProcessor();
+            postProcessor.setBeanFactory(beanFactory);
+            beanFactory.addBeanPostProcessor(postProcessor);
+        }
+        {
+            AspectJAutoProxyCreator postProcessor = new AspectJAutoProxyCreator();
+            postProcessor.setBeanFactory(beanFactory);
+            beanFactory.addBeanPostProcessor(postProcessor);
+        }
     }
 
     @Override

@@ -4,9 +4,12 @@ import pers.minispring.beans.BeanDefinition;
 import pers.minispring.beans.PropertyValue;
 import pers.minispring.beans.SimpleTypeConverter;
 import pers.minispring.beans.factory.BeanCreationException;
+import pers.minispring.beans.factory.BeanFactoryAware;
 import pers.minispring.beans.factory.NoSuchBeanDefinitionException;
+import pers.minispring.beans.factory.config.BeanPostProcessor;
 import pers.minispring.beans.factory.config.ConfigurableBeanFactory;
 import pers.minispring.beans.factory.config.DependencyDescriptor;
+import pers.minispring.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import pers.minispring.util.ClassUtils;
 
 import java.beans.BeanInfo;
@@ -21,7 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author songbao.yang
  */
-public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory, BeanDefinitionRegistry {
+public class DefaultBeanFactory extends AbstractBeanFactory implements BeanDefinitionRegistry {
+
+    private List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
     private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
@@ -31,6 +36,14 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
 
     private ConstructorResolver constructorResolver;
 
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor postProcessor){
+        this.beanPostProcessors.add(postProcessor);
+    }
+    @Override
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
 
     public DefaultBeanFactory() {
         converter = new SimpleTypeConverter();
@@ -97,16 +110,54 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry implements 
         return result;
     }
 
-    private Object createBean(BeanDefinition beanDefinition) {
+    @Override
+    protected Object createBean(BeanDefinition beanDefinition) {
         Object bean = instantiateBean(beanDefinition);
+
         populateBean(beanDefinition, bean);
+
+        bean = initializeBean(beanDefinition, bean);
+
         return bean;
     }
 
-    private void populateBean(BeanDefinition beanDefinition, Object bean) {
+    private Object initializeBean(BeanDefinition beanDefinition, Object bean) {
+        invokeAwareMethods(bean);
+        //Todo，调用Bean的init方法，暂不实现
+        if(!beanDefinition.isSynthetic()){
+            return applyBeanPostProcessorsAfterInitialization(bean,beanDefinition.getID());
+        }
+        return bean;
+    }
+
+    private void invokeAwareMethods(Object bean) {
+        if (bean instanceof BeanFactoryAware) {
+            ((BeanFactoryAware) bean).setBeanFactory(this);
+        }
+    }
+
+    private Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) {
+        Object result = existingBean;
+        for (BeanPostProcessor beanProcessor : getBeanPostProcessors()) {
+            result = beanProcessor.afterInitialization(result, beanName);
+            if (result == null) {
+                return result;
+            }
+        }
+        return result;
+    }
+
+    protected void populateBean(BeanDefinition beanDefinition, Object bean) {
+
+        for(BeanPostProcessor processor : this.getBeanPostProcessors()){
+            if(processor instanceof InstantiationAwareBeanPostProcessor){
+                ((InstantiationAwareBeanPostProcessor)processor).postProcessPropertyValues(bean, beanDefinition.getID());
+            }
+        }
+
         List<PropertyValue> propertyValues = beanDefinition.getPropertyValues();
 
-        if (propertyValues == null || propertyValues.size() == 0) {
+        if (propertyValues == null || propertyValues.isEmpty()) {
             return;
         }
 

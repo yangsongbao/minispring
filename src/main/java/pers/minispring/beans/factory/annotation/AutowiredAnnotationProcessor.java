@@ -3,6 +3,7 @@ package pers.minispring.beans.factory.annotation;
 import pers.minispring.beans.BeansException;
 import pers.minispring.beans.factory.BeanCreationException;
 import pers.minispring.beans.factory.config.AutowireCapableBeanFactory;
+import pers.minispring.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import pers.minispring.util.AnnotationUtils;
 import pers.minispring.util.ReflectionUtils;
 
@@ -18,7 +19,7 @@ import java.util.Set;
 /**
  * @author songbao.yang
  */
-public class AutowiredAnnotationProcessor {
+public class AutowiredAnnotationProcessor implements InstantiationAwareBeanPostProcessor {
 
     private final Set<Class<? extends Annotation>> autowiredAnnotationTypes = new LinkedHashSet<>();
     private AutowireCapableBeanFactory beanFactory;
@@ -86,25 +87,30 @@ public class AutowiredAnnotationProcessor {
         this.beanFactory = beanFactory;
     }
 
+    @Override
     public Object beforeInitialization(Object bean, String beanName) throws BeansException {
         //do nothing
         return bean;
     }
 
+    @Override
     public Object afterInitialization(Object bean, String beanName) throws BeansException {
         // do nothing
         return bean;
     }
 
+    @Override
     public Object beforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
         return null;
     }
 
+    @Override
     public boolean afterInstantiation(Object bean, String beanName) throws BeansException {
         // do nothing
         return true;
     }
 
+    @Override
     public void postProcessPropertyValues(Object bean, String beanName) throws BeansException {
         InjectionMetadata metadata = buildAutowiringMetadata(bean.getClass());
         try {

@@ -10,7 +10,7 @@
 			http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan
-            base-package="pers.minispring.service.v5">
+            base-package="pers.minispring.service.v5,pers.minispring.dao.v5">
     </context:component-scan>
 
     <bean id="tx" class="pers.minispring.tx.TransactionManager"/>
